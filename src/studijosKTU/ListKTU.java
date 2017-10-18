@@ -71,6 +71,23 @@ public class ListKTU<E extends Comparable<E>>
 		if (k < 0 || k >= size) {
 			return false;
 		}
+                if (k == 0) {
+                first = new Node<> (e,first);
+                return true;
+                }
+                if(k == size){
+                    last.next = new Node<>(e,null);
+                    last = last.next;
+                    return true;
+                }
+                Node<E> nodeOfTheEkementBeforeIsertion = first.findNode(k-1);
+                nodeOfTheEkementBeforeIsertion.next = new Node<>(e, nodeOfTheEkementBeforeIsertion.next);
+                //return true;
+//                Node e1 = first;
+//                for (int i = 1; i < k-1; i++) {
+//                e1 = e1.next;
+//                }
+//                e1.next = new Node (e,e1.next);
 		throw new UnsupportedOperationException("Studentams reikia realizuoti add(int k, E e)");
 	}
 
@@ -128,7 +145,28 @@ public class ListKTU<E extends Comparable<E>>
 	 */
 	@Override
 	public E set(int k, E e) {
-		throw new UnsupportedOperationException("Studentams reikia realizuoti set(int k, E e)");
+            if (k == 0) {
+                E temp = first.element; 
+                first = new Node<> (e,first);
+                return temp;
+            }
+            if(k == size){
+                E temp = last.element; 
+                last.next = new Node<>(e,null);
+                last = last.next;
+                return temp;
+            }
+            Node<E> nodeOfTheEkementBeforeIsertion = first.findNode(k-1);
+            E temp = nodeOfTheEkementBeforeIsertion.element;
+            nodeOfTheEkementBeforeIsertion.next = new Node<>(e, nodeOfTheEkementBeforeIsertion.next);
+            return temp;
+//            Node<E> e1 = first;
+//            for (int i = 1; i < k-1; i++) {
+//            e1 = e1.next;
+//            }
+//            E temp2 = e1.element;
+//            e1.next = new Node (e,e1.next);
+            //throw new UnsupportedOperationException("Studentams reikia realizuoti set(int k, E e)");
 	}
 
 	/**
@@ -156,7 +194,23 @@ public class ListKTU<E extends Comparable<E>>
 	 */
 	@Override
 	public E remove(int k) {
-		throw new UnsupportedOperationException("Studentams reikia realizuoti remove(int k)");
+            if (k == 0) {
+                E removedElement = first.element; 
+                first = first.next;
+                return removedElement;
+            }
+            if(k == size){
+                E removedElement = last.element; 
+                Node<E> nodeBeforeLast = first.findNode(size-1);
+                last = nodeBeforeLast;
+                return removedElement;
+            }
+            Node<E> nodeBeforeTheRemovingOne = first.findNode(k-1);
+            E removedElement = nodeBeforeTheRemovingOne.next.element;
+            nodeBeforeTheRemovingOne.next = nodeBeforeTheRemovingOne.next.next;
+            return removedElement;
+            
+            //throw new UnsupportedOperationException("Studentams reikia realizuoti remove(int k)");
 	}
 
 	/**
