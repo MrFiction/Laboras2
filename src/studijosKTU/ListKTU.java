@@ -240,6 +240,10 @@ public class ListKTU<E extends Comparable<E>>
 		cl.size = this.size;
 		return cl;
 	}
+        @Override
+        public int lastIndexOf(E e){
+            
+        }
     //  !
 
 	/**
@@ -334,6 +338,7 @@ public class ListKTU<E extends Comparable<E>>
 			}
 		}
 	}
+        @overide
 
 	/**
 	 * Sukuria iteratoriaus objektą sąrašo elementų peržiūrai
@@ -372,6 +377,7 @@ public class ListKTU<E extends Comparable<E>>
 		public void remove() {
 			throw new UnsupportedOperationException("Studentams reikia realizuoti ListItr.remove()");
 		}
+                
 	}
 
 	/**
