@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package lab2grigaliauskas;
-
+import java.util.*;
 /**
  *
  * @author Laptopas
@@ -16,6 +16,8 @@ public class Lab2Grigaliauskas {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        List<kazkas> ok  = new ArrayList<>();
+        ok.l
     }
     
 }

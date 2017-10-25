@@ -12,8 +12,10 @@
 package studijosKTU;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+
 
 /**
  * Koreguota 2015-09-18
@@ -66,30 +68,28 @@ public class ListKTU<E extends Comparable<E>>
 	@Override
 	public boolean add(int k, E e) {
 		if (e == null) {
-			return false;
+                    return false;
 		}
-		if (k < 0 || k >= size) {
-			return false;
+		if (k < 0 || k > size) {
+			throw new ArrayIndexOutOfBoundsException("k is out of bounds");
 		}
                 if (k == 0) {
-                first = new Node<> (e,first);
-                return true;
+                    first = new Node<> (e,first);
                 }
-                if(k == size){
-                    last.next = new Node<>(e,null);
-                    last = last.next;
-                    return true;
+                else if(k == size){
+                        last.next = new Node<>(e,null);
+                        last = last.next;
                 }
-                Node<E> nodeOfTheEkementBeforeIsertion = first.findNode(k-1);
-                nodeOfTheEkementBeforeIsertion.next = new Node<>(e, nodeOfTheEkementBeforeIsertion.next);
-                //return true;
-//                Node e1 = first;
-//                for (int i = 1; i < k-1; i++) {
-//                e1 = e1.next;
-//                }
-//                e1.next = new Node (e,e1.next);
-		throw new UnsupportedOperationException("Studentams reikia realizuoti add(int k, E e)");
+                else{
+                    Node<E> nodeOfTheEkementBeforeIsertion = first.findNode(k-1);
+                    nodeOfTheEkementBeforeIsertion.next = new Node<>(e, nodeOfTheEkementBeforeIsertion.next);
+                }
+                size++;
+                return true;              
 	}
+        public void addFirst(E e){
+            first = new Node<> (e,first);
+        }
 
 	/**
 	 *
@@ -160,13 +160,6 @@ public class ListKTU<E extends Comparable<E>>
             E temp = nodeOfTheEkementBeforeIsertion.element;
             nodeOfTheEkementBeforeIsertion.next = new Node<>(e, nodeOfTheEkementBeforeIsertion.next);
             return temp;
-//            Node<E> e1 = first;
-//            for (int i = 1; i < k-1; i++) {
-//            e1 = e1.next;
-//            }
-//            E temp2 = e1.element;
-//            e1.next = new Node (e,e1.next);
-            //throw new UnsupportedOperationException("Studentams reikia realizuoti set(int k, E e)");
 	}
 
 	/**
@@ -194,24 +187,53 @@ public class ListKTU<E extends Comparable<E>>
 	 */
 	@Override
 	public E remove(int k) {
+            if (k > size || k < 0) {
+                throw new ArrayIndexOutOfBoundsException("k is out of bounds");
+            }
+            E removedElement;
             if (k == 0) {
-                E removedElement = first.element; 
+                removedElement = first.element; 
                 first = first.next;
-                return removedElement;
             }
-            if(k == size){
-                E removedElement = last.element; 
-                Node<E> nodeBeforeLast = first.findNode(size-1);
-                last = nodeBeforeLast;
-                return removedElement;
+            else if(k == size){
+                    removedElement = last.element; 
+                    Node<E> nodeBeforeLast = first.findNode(size-1);
+                    last = nodeBeforeLast;
             }
-            Node<E> nodeBeforeTheRemovingOne = first.findNode(k-1);
-            E removedElement = nodeBeforeTheRemovingOne.next.element;
-            nodeBeforeTheRemovingOne.next = nodeBeforeTheRemovingOne.next.next;
+            else{
+                Node<E> nodeBeforeTheRemovingOne = first.findNode(k-1);
+                removedElement = nodeBeforeTheRemovingOne.next.element;
+                nodeBeforeTheRemovingOne.next = nodeBeforeTheRemovingOne.next.next;
+            }
+            size--;
             return removedElement;
             
             //throw new UnsupportedOperationException("Studentams reikia realizuoti remove(int k)");
 	}
+        public boolean remove(Object o){
+            if (getClass() != o.getClass()) {
+                    return false;
+                }
+            if (first.equals((E)o)) {
+                first = first.next;
+                size--;
+                return true;
+            }
+            if (last.equals((E)o)) {
+                Node<E> nodeBeforeLast = first.findNode(size-1);
+                last = nodeBeforeLast;
+                size--;
+                return true;
+            }
+            for(Node<E> e1 = first; e1.next != null; e1 = e1.next){
+                if (e1.next.equals((E)o)) {
+                    e1.next = e1.next.next;
+                    size--;
+                    return true;
+                }
+            }
+            return false;
+        }
 
 	/**
 	 *
@@ -240,9 +262,21 @@ public class ListKTU<E extends Comparable<E>>
 		cl.size = this.size;
 		return cl;
 	}
-        @Override
+        
         public int lastIndexOf(E e){
-            
+            int i = 0;
+            int k = -1;
+            for (Node<E> e1 = first; e1.next != null; e1 = e1.next,i++) {
+                if (e1.equals(e)) {
+                    k = i;
+                }
+            }
+            return k;
+        }
+        public boolean retainAll(Collection<E> c){
+            if (c instanceof ListKTU ) {
+                
+            }
         }
     //  !
 
@@ -338,7 +372,6 @@ public class ListKTU<E extends Comparable<E>>
 			}
 		}
 	}
-        @overide
 
 	/**
 	 * Sukuria iteratoriaus objektą sąrašo elementų peržiūrai
@@ -375,7 +408,21 @@ public class ListKTU<E extends Comparable<E>>
 
 		@Override
 		public void remove() {
-			throw new UnsupportedOperationException("Studentams reikia realizuoti ListItr.remove()");
+			if (iterPosition == first) { 
+                            first = first.next;
+                        }
+                        else if(iterPosition.next == null){
+                            Node<E> nodeBeforeLast = first.findNode(size-1);
+                            last = nodeBeforeLast;
+                        }
+                        else{
+                            for (Node<E> e1 = first; e1 != null; e1 = e1.next) {
+                                if (iterPosition.equals(e1.next)) {
+                                    e1.next = e1.next.next;
+                                }
+                            }
+                        }
+                        
 		}
                 
 	}
