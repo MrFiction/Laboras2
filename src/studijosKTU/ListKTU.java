@@ -274,9 +274,17 @@ public class ListKTU<E extends Comparable<E>>
             return k;
         }
         public boolean retainAll(Collection<E> c){
-            if (c instanceof ListKTU ) {
-                
+            boolean listChnaged = false;
+            if (getClass() != c.getClass()) {
+                throw new ClassCastException();
             }
+            for (Node<E> e1 = first; e1 != null; e1 = e1.next) {
+                if(!(c.contains(e1.element)))  {
+                    remove(e1);
+                    listChnaged = true;
+                }
+            }
+            return listChnaged;
         }
     //  !
 
