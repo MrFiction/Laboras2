@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package lab2grigaliauskas;
+
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -16,7 +18,7 @@ import studijosKTU.KTUable;
  * @author Laptopas
  */
 public class kazkas implements KTUable<kazkas> {
-    
+
     final static private LocalDate curentYearLocalVar = LocalDate.now();
     private double price;
     private LocalDate manifacturingDate;
@@ -25,7 +27,7 @@ public class kazkas implements KTUable<kazkas> {
 
     public kazkas() {
     }
-    
+
     public kazkas(double price, LocalDate manifacuturingDate, String model, int serialNumber) {
         this.price = price;
         this.manifacturingDate = manifacuturingDate;
@@ -65,18 +67,21 @@ public class kazkas implements KTUable<kazkas> {
         this.serialNumber = serialNumber;
     }
 
-
+    @Override
+    public String toString() {
+        return "Price=" + String.format("%.2f", price) + ", Manifacturing date=" + manifacturingDate + ", Model=" + model + ", serialNumber=" + serialNumber;
+    }
 
     @Override
     public KTUable create(String dataString) {
         kazkas tempObj = new kazkas();
         tempObj.parse(dataString);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tempObj;
     }
 
     @Override
     public String validate() {
-        if (manifacturingDate.compareTo(curentYearLocalVar.minusYears(10)) < 0 || manifacturingDate.compareTo(curentYearLocalVar) > 0 ) {
+        if (manifacturingDate.compareTo(curentYearLocalVar.minusYears(10)) < 0 || manifacturingDate.compareTo(curentYearLocalVar) > 0) {
             return "netinkama data";
         }
         return "";
@@ -84,31 +89,33 @@ public class kazkas implements KTUable<kazkas> {
 
     @Override
     public void parse(String dataString) {
-        try{
+        try {
             Scanner data = new Scanner(dataString);
             price = data.nextDouble();
             manifacturingDate = LocalDate.parse(data.next());
             model = data.next();
             serialNumber = data.nextInt();
-            
-            
-        }
-        catch (InputMismatchException  e) {
-          System.out.print("Netinkamas formatas");
-            
-        }
-        catch(NoSuchElementException e){
+
+        } catch (InputMismatchException e) {
+            System.out.print("Netinkamas formatas");
+
+        } catch (NoSuchElementException e) {
             System.out.print("Nuztenka duomenu");
-                       
+
         }
     }
 
     @Override
     public int compareTo(kazkas e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (price > e.price) {
+            return 1;
+        }
+        if (price < e.price) {
+            return -1;
+        }
+        return 0;
     }
 
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -135,6 +142,7 @@ public class kazkas implements KTUable<kazkas> {
         }
         return true;
     }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -144,6 +152,25 @@ public class kazkas implements KTUable<kazkas> {
         hash = 79 * hash + this.serialNumber;
         return hash;
     }
-    
-    
+
+    public final static Comparator byManufacturingDate = new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            kazkas a1 = (kazkas) o1;
+            kazkas a2 = (kazkas) o2;
+            int compare = a1.getManifacuturingDate().compareTo(a2.getManifacuturingDate());
+            return compare;
+        }
+    };
+
+    public final static Comparator byPrice = new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            kazkas a1 = (kazkas) o1;
+            kazkas a2 = (kazkas) o2;
+            return Double.compare(a1.getPrice(), a2.getPrice());
+
+        }
+    };
+
 }
