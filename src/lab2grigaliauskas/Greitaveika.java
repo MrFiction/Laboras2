@@ -54,8 +54,16 @@ public class Greitaveika {
         }
         return temp;
     }
+    
+     int[] generateIntegeres(int numberOfElements) {
+        int[] temp = new int[numberOfElements];
+        for (int i = 0; i < numberOfElements; i++) {
+            temp[i] = ValueGenerator.randomSerialNumber();
+        }
+        return temp;
+    }
 
-    ArrayList<Double> generateDoublesToArrayList(int numberOfElements, double numbers[]) {
+    ArrayList<Double> generateIntegeresToArrayList(int numberOfElements, double numbers[]) {
         ArrayList<Double> arrayList = new ArrayList<Double>();
         for (int i = 0; i < numberOfElements; i++) {
             arrayList.add(numbers[i]);
@@ -63,7 +71,7 @@ public class Greitaveika {
         return arrayList;
     }
 
-    LinkedList<Double> generateDoublesToLinkedList(int numberOfElements, double numbers[]) {
+    LinkedList<Double> generateIntegeresToLinkedList(int numberOfElements, double numbers[]) {
         LinkedList<Double> linkedList = new LinkedList<Double>();
         for (int i = 0; i < numberOfElements; i++) {
             linkedList.add(numbers[i]);
@@ -76,9 +84,9 @@ public class Greitaveika {
         long t0 = System.nanoTime();
         double numbers[] = generateDoubles(numberOfElements);
         long t1 = System.nanoTime();
-        ArrayList<Double> arrayList = generateDoublesToArrayList(numberOfElements, numbers);
+        ArrayList<Double> arrayList = generateIntegeresToArrayList(numberOfElements, numbers);
         long t2 = System.nanoTime();
-        LinkedList<Double> linkedList = generateDoublesToLinkedList(numberOfElements, numbers);
+        LinkedList<Double> linkedList = generateIntegeresToLinkedList(numberOfElements, numbers);
         long t3 = System.nanoTime();
         System.gc();
         System.gc();
